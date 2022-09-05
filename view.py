@@ -1,51 +1,54 @@
 import re
 from rich.console import Console
 from rich.table import Table
+from rich import print
+from rich.prompt import Prompt
 
 verif_first_name = "^[A-Za-z]+$"
 verif_date = "^[0-9]{1,2}\\/[0-9]{1,2}\\/[0-9]{4}$"
 
+
 class View:
     @staticmethod
     def prompt_userName_player(reset_first_name):
-        first_name = input("Saisisez le prenom du joueur: ")
+        first_name = Prompt.ask("[bold blue]Saisisez le prenom du joueur: ")
         if re.match(verif_first_name, first_name):
             return first_name
         else:
-            print("Information incorrect")
+            print("[bold red]Information incorrect")
             return reset_first_name(reset_first_name)
 
     @staticmethod
     def prompt_name_player(reset_name):
-        name = input("Saisisez le nom du joueur: ")
+        name = Prompt.ask("[bold blue]Saisisez le nom du joueur: ")
         if re.match(verif_first_name, name):
             return name
         else:
-            print("Information incorrect")
+            print("[bold red]Information incorrect")
             return reset_name(reset_name)
 
     @staticmethod
     def prompt_dateBirth_player(reset_date_birth):
-        date_birth = input("Saisisez la date de naissance du joueur: ")
+        date_birth = Prompt.ask("[bold blue]Saisisez la date de naissance du joueur: ")
         if re.match(verif_date, date_birth):
             return date_birth
         else:
-            print("Information incorrect")
+            print("[bold red]Information incorrect")
             return reset_date_birth(reset_date_birth)
 
     @staticmethod
     def prompt_sex_player(reset_sex):
-        sex = input("Saisisez la civilité du joueur: ")
+        sex = Prompt.ask("[bold blue]Saisisez la civilité du joueur: ")
         verif_genre = "^[e-oE-O]+$"
         if re.match(verif_genre, sex):
             return sex
         else:
-            print("Information incorrect")
+            print("[bold red]Information incorrect")
             return reset_sex(reset_sex)
 
     @staticmethod
     def prompt_ranking_player():
-        ranking = int(input("Saisisez le classement du joueur: "))
+        ranking = int(Prompt.ask("[bold blue]Saisisez le classement du joueur: "))
         if ranking == 0:
             return ranking
         else:
@@ -53,48 +56,47 @@ class View:
 
     @staticmethod
     def prompt_name_tournament(reset_name):
-        name = input("Saisisez le nom du tournoi: ")
+        name = Prompt.ask("[bold blue]Saisisez le nom du tournoi: ")
         if re.match(verif_first_name, name):
             return name
         else:
-            print("Information incorrect")
+            print("[bold red]Information incorrect")
             return reset_name(reset_name)
 
     @staticmethod
     def prompt_lieu_tournament(reset_lieu):
-        lieu = input("Saisisez le lieu du tournoi: ")
+        lieu = Prompt.ask("[bold blue]Saisisez le lieu du tournoi: ")
         if re.match(verif_first_name, lieu):
             return lieu
         else:
-            print("Information incorrect")
+            print("[bold red]Information incorrect")
             return reset_lieu(reset_lieu)
 
     @staticmethod
     def prompt_date_tournament(reset_date):
-        date = input("Saisisez la date du tournoi: ")
+        date = Prompt.ask("[bold blue]Saisisez la date du tournoi: ")
         if re.match(verif_date, date):
             return date
         else:
-            print("Information incorrect")
+            print("[bold red]Information incorrect")
             return reset_date(reset_date)
 
     @staticmethod
     def prompt_add_player(query, players, add_player):
         player = query()
         while len(add_player) < 8:
-            first_name = input(
-                f"Entrez le prenom du joueur{len(add_player) +1}: ")
-            name = input(f"Entrez le nom du joueur{len(add_player) +1}: ")
+            first_name = Prompt.ask(f"[bold blue]Entrez le prenom du joueur{len(add_player) +1}: ")
+            name = Prompt.ask(f"[bold blue]Entrez le nom du joueur{len(add_player) +1}: ")
             recupFirst_name = players.search(player.prenom == first_name)
             recup_name = players.search(player.nom == name)
             if recupFirst_name and recup_name:
                 add_player.append(recupFirst_name[0])
             else:
-                print("Joueur introuvable")
+                print("[bold red]Joueur introuvable")
 
     @staticmethod
     def prompt_time_tournament(reset_time):
-        time = input("Saisisez le temps du tournoi(bullet,blitz,coup-rapide):")
+        time = Prompt.ask("[bold blue]Saisisez le temps du tournoi(bullet,blitz,coup-rapide):")
         if time == "bullet" or time == "Bullet" or time == "BULLET":
             return time
         elif time == "blitz" or time == "Blitz" or time == "BLITZ":
@@ -102,7 +104,7 @@ class View:
         elif time == "coup-rapide" or time == "Coup-rapide" or time == "COUP-RAPIDE":
             return time
         else:
-            print("Information incorrect")
+            print("[bold red]Information incorrect")
             return reset_time(reset_time)
 
     @staticmethod
@@ -117,7 +119,7 @@ class View:
         console = Console()
         console.print(table)
 
-        question = int(input("Saisisez 1, 2, 3, 4: "))
+        question = int(Prompt.ask("[bold blue]Saisisez 1, 2, 3, 4: "))
         if question == 1:
             menu1()
         elif question == 2:
@@ -127,7 +129,7 @@ class View:
         elif question == 4:
             exit()
         else:
-            print("Information incorrect")
+            print("[bold red]Information incorrect")
             View.menu(menu1, menu2, menu3)
 
     @staticmethod
@@ -141,7 +143,7 @@ class View:
         console = Console()
         console.print(table)
 
-        question = int(input("Saisisez 1, 2, 3: "))
+        question = int(Prompt.ask("[bold blue]Saisisez 1, 2, 3: "))
         if question == 1:
             menu1()
         elif question == 2:
@@ -149,7 +151,7 @@ class View:
         elif question == 3:
             menu3()
         else:
-            print("Information incorrect")
+            print("[bold red]Information incorrect")
             View.menu_player(menu1, menu2, menu3)
 
     @staticmethod
@@ -164,7 +166,7 @@ class View:
         console = Console()
         console.print(table)
 
-        question = int(input("Saisisez 1, 2, 3, 4: "))
+        question = int(Prompt.ask("[bold blue]Saisisez 1, 2, 3, 4: "))
         if question == 1:
             menu1()
         elif question == 2:
@@ -174,97 +176,97 @@ class View:
         elif question == 4:
             menu4()
         else:
-            print("Informations incorrect")
+            print("[bold red]Informations incorrect")
             View.menu_tournament(menu1, menu2, menu3, menu4)
 
     @staticmethod
     def get_players_tournaments_database(get_players_tournament_database):
-        print("Joueurs enregistré: ")
+        print("[bold blue]Joueurs enregistré: ")
         get_players_tournament_database()
-        print("Ajouter 8 joueurs: ")
+        print("[bold blue]Ajouter 8 joueurs: ")
 
     @staticmethod
     def phrasing_create_tournament():
-        print("Tournoi créer")
+        print("[bold green]Tournoi créer")
 
     @staticmethod
     def phrasing_create_player():
-        print("Joueur créer")
+        print("[bold green]Joueur créer")
 
     @staticmethod
     def phrasing_none_players():
-        print("Aucun joueurs enregistrés")
+        print("[bold red]Aucun joueurs enregistrés")
 
     @staticmethod
     def phrasing_none_tournaments():
-        print("Il n'y a pas de tournois dans la base de donnée")
+        print("[bold red]Il n'y a pas de tournois dans la base de donnée")
 
     @staticmethod
     def return_menu(menu, choice_menu):
-        question = input("Retourner au menu: y/n ")
+        question = Prompt.ask("[bold blue]Retourner au menu: y/n ")
         if question == "y" or question == "Y":
             menu()
         elif question == "n" or question == "N":
             choice_menu()
         else:
-            print("Informations incorrect")
+            print("[bold red]Informations incorrect")
             View.return_menu(menu, choice_menu)
 
     @staticmethod
     def phrasing_len_players(players_table_all):
         if len(players_table_all()) == 8:
-            print(f"Il y a {len(players_table_all())} joueurs qui peuvent participer au tournoi")
+            print(f"[bold green]Il y a {len(players_table_all())} joueurs qui peuvent participer au tournoi")
 
         elif len(players_table_all()) < 8:
-            print(f"Il n'y a que {len(players_table_all())} joueurs")
-            print("Il n'y a pas assez de joueurs pour participer a un tournoi")
+            print(f"[bold red]Il n'y a que {len(players_table_all())} joueurs")
+            print("[bold red]Il n'y a pas assez de joueurs pour participer a un tournoi")
 
         else:
-            print("Il y a que 8 joueurs maximums qui peuvent participer à un tournoi")
-            print(f"Il y a {len(players_table_all())} deja enregistrés")
+            print("[bold red]Il y a que 8 joueurs maximums qui peuvent participer à un tournoi")
+            print(f"[bold red]Il y a {len(players_table_all())} deja enregistrés")
 
     @staticmethod
     def prompt_round():
-        round = input("Entrez le nom du round: ")
+        round = Prompt.ask("[bold blue]Entrez le nom du round: ")
         return round
 
     @staticmethod
     def prompt_phrasing_name_tournament():
-        tournament = input("Tapez le nom du tournoi: ")
+        tournament = Prompt.ask("[bold blue]Tapez le nom du tournoi: ")
         return tournament
 
     @staticmethod
     def prompt_heure_start_round():
-        heure_start = input("Entrez l'heure du début du round: ")
+        heure_start = Prompt.ask("[bold blue]Entrez l'heure du début du round: ")
         return heure_start
 
     @staticmethod
     def prompt_date_start_round(reset_date):
-        date_start = input("Entrez la date de début du round: ")
+        date_start = Prompt.ask("[bold blue]Entrez la date de début du round: ")
         if re.match(verif_date, date_start):
             return date_start
         else:
-            print("Information incorrect")
+            print("[bold red]Information incorrect")
             return reset_date(reset_date)
 
     @staticmethod
     def prompt_heure_end_round():
-        heure_end = input("Entrez l'heure de fin du round: ")
+        heure_end = Prompt.ask("[bold blue]Entrez l'heure de fin du round: ")
         return heure_end
 
     @staticmethod
     def prompt_date_end_round(reset_date):
-        date_end = input("Entrez la date de fin du round: ")
+        date_end = Prompt.ask("[bold blue]Entrez la date de fin du round: ")
         if re.match(verif_date, date_end):
             return date_end
         else:
-            print("Information incorrect")
+            print("[bold red]Information incorrect")
             return reset_date(reset_date)
 
     @staticmethod
     def prompt_nRound():
         print("Créer le round")
-        nRound = int(input("Tapez le n° du round: "))
+        nRound = int(Prompt.ask("[bold blue]Tapez le n° du round: "))
         return nRound
 
     @staticmethod
@@ -280,4 +282,4 @@ class View:
 
     @staticmethod
     def phrasing_tournament():
-        print("Tournoi introuvable")
+        print("[bold red]Tournoi introuvable")
