@@ -1,9 +1,10 @@
 from rich.console import Console
 from rich.table import Table
-
+from rich import print
+from tinydb import TinyDB, Query
 
 class Controller:
-    def __init__(self, Players, Tournaments, Rounds, Matchs, View, Tinydb, Query):
+    def __init__(self, Players, Tournaments, Rounds, Matchs, View):
         # Models
         self.players = Players
         self.tournaments = Tournaments
@@ -14,9 +15,7 @@ class Controller:
         self.view = View
 
         # DATABASE
-        self.tinydb = Tinydb
-        self.Query = Query
-        self.db = self.tinydb("db.json")
+        self.db = TinyDB("db.json")
         self.players_table = self.db.table("players")
         self.tournaments_table = self.db.table("tournaments")
 
@@ -29,7 +28,7 @@ class Controller:
             self.view.prompt_time_tournament(self.view.prompt_time_tournament),
         )
         self.view.get_players_tournaments_database(self.get_players_tournament_database)
-        self.view.prompt_add_player(self.Query, self.players_table, tournaments.add_player)
+        self.view.prompt_add_player(Query, self.players_table, tournaments.add_player)
         serialized_tournament = {
             "nom": tournaments.name,
             "lieu": tournaments.lieu,
@@ -157,9 +156,8 @@ class Controller:
 
     # Create round
     def create_round(self):
-        trt = self.Query()
+        verif = Query()
         if not self.tournaments_table.all() == []:
-
             table = Table()
             table.add_column("Tournoi", justify="center", style="cyan", no_wrap=True)
             for tournament in self.tournaments_table.all():
@@ -167,9 +165,9 @@ class Controller:
             console = Console()
             console.print(table)
 
-            search_tournament = self.tournaments_table.search(trt.nom == self.view.prompt_phrasing_name_tournament())
+            search_tournament = self.tournaments_table.search(verif.nom == self.view.prompt_phrasing_name_tournament())
             if search_tournament:
-                print("Vous avez accès au tournoi")
+                print("[bold green]Vous avez accès au tournoi")
                 for i in range(len(search_tournament[0]["rounds"])):
                     if search_tournament[0]["rounds"][i] == "ROUND 4":
                         search_tournament[0]["joueurs"].sort(key=lambda x: (x.get("score")), reverse=True)
@@ -210,9 +208,8 @@ class Controller:
 
     # Create the 1st round
     def first_round(self, search_tournament):
-        trt = self.Query()
-
-        print("<--------------Round 1 commencé---------------->")
+        verif = Query()
+        print("[bold green]---Round1 commencé---")
         rounds = self.rounds("ROUND 1", self.view.prompt_heure_start_round(),
                              self.view.prompt_date_start_round(self.view.prompt_date_start_round))
 
@@ -257,7 +254,7 @@ class Controller:
                        ],
             "joueurs": search_tournament[0]["joueurs"]
         },
-            trt.nom == search_tournament[0]["nom"]
+            verif.nom == search_tournament[0]["nom"]
         )
         search_tournament[0]["rounds"] = [rounds.name, rounds.heure_start, rounds.date_start,
                                           rounds.matchs, rounds.heure_end, rounds.date_end]
@@ -266,7 +263,7 @@ class Controller:
 
     # Create a round after the first round
     def after_first_round(self, search_tournament):
-        trt = self.Query()
+        verif = Query()
         round = 1
         while search_tournament[0]["number_round"] > round:
             round += 1
@@ -329,7 +326,7 @@ class Controller:
                 self.tournaments_table.update({
                     "rounds": i["rounds"],
                     "joueurs": search_tournament[0]["joueurs"]},
-                    trt.nom == search_tournament[0]["nom"])
+                    verif.nom == search_tournament[0]["nom"])
 
             print(f"<------------Round {round} terminée------------------>")
             if round == 4:
@@ -343,7 +340,7 @@ class Controller:
             print(i)
 
     def display_style_players_database(self, players):
-        table = Table(title="Joueurs")
+        table = Table()
         table.add_column("prenom", justify="center", style="cyan", no_wrap=True)
         table.add_column("nom", justify="center", style="cyan", no_wrap=True)
         table.add_column("date_de_naissance", justify="center", style="cyan", no_wrap=True)
