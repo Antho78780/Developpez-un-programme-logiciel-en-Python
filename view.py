@@ -5,7 +5,6 @@ from rich.table import Table
 verif_first_name = "^[A-Za-z]+$"
 verif_date = "^[0-9]{1,2}\\/[0-9]{1,2}\\/[0-9]{4}$"
 
-
 class View:
     @staticmethod
     def prompt_userName_player(reset_first_name):
