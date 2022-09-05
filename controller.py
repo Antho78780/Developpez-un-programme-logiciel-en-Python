@@ -220,10 +220,7 @@ class Controller:
         sup_moitie = search_tournament[0]["joueurs"][:4]
         inf_moitie = search_tournament[0]["joueurs"][4:]
 
-        print("<-------------Classement des joueurs-------------------->")
-        for moitie in sup_moitie, inf_moitie:
-            for m in moitie:
-                print(m)
+        self.display_style_players_database(search_tournament[0]["joueurs"])
 
         Matchs = self.matchs()
 
@@ -231,10 +228,6 @@ class Controller:
             match = [sup_moitie[i]["prenom"]] + [sup_moitie[i]["score"]], \
                     [inf_moitie[i]["prenom"]] + [inf_moitie[i]["score"]]
             Matchs.matchs.append(match)
-
-        print("<--------------Matchs------------->")
-        for m in Matchs.matchs:
-            print(m)
 
         for m in Matchs.matchs:
             print("<------------Match----------->")
