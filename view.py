@@ -82,17 +82,20 @@ class View:
             return reset_date(reset_date)
 
     @staticmethod
-    def prompt_add_player(query, players, add_player):
+    def prompt_add_player(query, players, add_player, return_menu, menu, cr_tr):
         player = query()
-        while len(add_player) < 8:
-            first_name = Prompt.ask(f"[bold blue]Entrez le prenom du joueur{len(add_player) +1}: ")
-            name = Prompt.ask(f"[bold blue]Entrez le nom du joueur{len(add_player) +1}: ")
-            recupFirst_name = players.search(player.prenom == first_name)
-            recup_name = players.search(player.nom == name)
-            if recupFirst_name and recup_name:
-                add_player.append(recupFirst_name[0])
-            else:
-                print("[bold red]Joueur introuvable")
+        if len(players.all()) < 8:
+            return_menu(menu, cr_tr)
+        else:
+            while len(add_player) < 8:
+                first_name = Prompt.ask(f"[bold blue]Entrez le prenom du joueur{len(add_player) +1}: ")
+                name = Prompt.ask(f"[bold blue]Entrez le nom du joueur{len(add_player) +1}: ")
+                recupFirst_name = players.search(player.prenom == first_name)
+                recup_name = players.search(player.nom == name)
+                if recupFirst_name and recup_name:
+                    add_player.append(recupFirst_name[0])
+                else:
+                    print("[bold red]Joueur introuvable")
 
     @staticmethod
     def prompt_time_tournament(reset_time):
@@ -183,7 +186,6 @@ class View:
     def get_players_tournaments_database(get_players_tournament_database):
         print("[bold blue]Joueurs enregistré: ")
         get_players_tournament_database()
-        print("[bold blue]Ajouter 8 joueurs: ")
 
     @staticmethod
     def phrasing_create_tournament():
