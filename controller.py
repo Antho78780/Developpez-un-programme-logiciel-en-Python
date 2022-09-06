@@ -3,6 +3,7 @@ from rich.table import Table
 from rich import print
 from tinydb import TinyDB, Query
 
+
 class Controller:
     def __init__(self, Players, Tournaments, Rounds, Matchs, View):
         # Models
@@ -28,7 +29,7 @@ class Controller:
             self.view.prompt_time_tournament(self.view.prompt_time_tournament),
         )
         self.view.get_players_tournaments_database(self.get_players_tournament_database)
-        self.view.prompt_add_player(Query, self.players_table, tournaments.add_player)
+        self.view.prompt_add_player(Query, self.players_table, tournaments.add_player, self.view.return_menu, self.menu, self.create_tournament)
         serialized_tournament = {
             "nom": tournaments.name,
             "lieu": tournaments.lieu,
