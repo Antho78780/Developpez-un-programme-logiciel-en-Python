@@ -1,3 +1,3 @@
 flake8-html==0.4.2
 tinydb==4.7.0
-richy==12.5.1
+rich==12.5.1
