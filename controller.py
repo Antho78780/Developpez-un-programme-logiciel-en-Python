@@ -1,6 +1,8 @@
 from rich.console import Console
 from rich.table import Table
 from rich import print
+from rich.prompt import Prompt
+from rich.tree import Tree
 from tinydb import TinyDB, Query
 
 
@@ -37,7 +39,8 @@ class Controller:
             "temps": tournaments.time,
             "number_round": tournaments.number_round,
             "rounds": tournaments.rounds,
-            "joueurs": tournaments.add_player
+            "joueurs": tournaments.add_player,
+            "description": tournaments.description
         }
         self.tournaments_table.insert(serialized_tournament)
         self.view.phrasing_create_tournament()
@@ -66,7 +69,15 @@ class Controller:
 
     # Rapports
     def rapports(self):
+        if len(self.tournaments_table.all()) > 1:
+            print(f"Il y a {len(self.tournaments_table.all())} tournois enregistrés")
+        else:
+            print(f"[bold green]Il y a {len(self.tournaments_table.all())} tournoi enregistré")
         for i in self.tournaments_table.all():
+            i["joueurs"].sort(key=lambda x: (x["classement"], x["prenom"]))
+            print(i)
+            print("---------------------")
+            """
             rounds = i["rounds"]
             name = i["nom"]
             lieu = i["lieu"]
@@ -74,26 +85,26 @@ class Controller:
             time = i["temps"]
             number_rounds = i["number_round"]
             joueurs = i["joueurs"]
-            array_player = []
-            for j in joueurs:
-                objet_player = {
-                    "prenom": j["prenom"],
-                    "classement": j["classement"]
-                }
-                array_player.append(objet_player)
-            array_player.sort(key=lambda x: x.get("prenom", x.get("classement")))
 
             table = Table()
-            table.add_column("Tournoi", justify="center", style="cyan", no_wrap=True)
+            table2 = Table()
+            table3 = Table()
+            table.add_column("Nom du Tournoi", justify="center", style="cyan", no_wrap=True)
             table.add_column("Lieu", justify="center", style="cyan", no_wrap=True)
             table.add_column("Date", justify="center", style="cyan", no_wrap=True)
             table.add_column("Temps", justify="center", style="cyan", no_wrap=True)
             table.add_column("Nombre de rounds", justify="center", style="cyan", no_wrap=True)
             table.add_row(name, lieu, date, time, str(number_rounds))
 
-            console = Console()
-            console.print(table)
-
+            table2.add_column("Joueurs", justify="center", style="cyan", no_wrap=True)
+            for a in joueurs:
+                table2.add_row(a["prenom"])
+            arbre = Tree(f"Tournoi")
+            arbre.add(table)
+            arbre.add(table2)
+            arbre.add(table3)
+            print(arbre)
+            """
         self.view.return_menu(self.menu, self.rapports)
 
     # Display of all registered players
@@ -127,6 +138,7 @@ class Controller:
                 date = i["date"]
                 time = i["temps"]
                 number_rounds = i["number_round"]
+                description = i["description"]
 
                 table = Table()
                 table.add_column("Nom du tournoi", justify="center", style="cyan", no_wrap=True)
@@ -134,8 +146,9 @@ class Controller:
                 table.add_column("Date", justify="center", style="cyan", no_wrap=True)
                 table.add_column("Temps", justify="center", style="cyan", no_wrap=True)
                 table.add_column("Nombre de rounds", justify="center", style="cyan", no_wrap=True)
+                table.add_column("Description", justify="center", style="cyan", no_wrap=True)
 
-                table.add_row(name, lieu, date, time, str(number_rounds))
+                table.add_row(name, lieu, date, time, str(number_rounds), description)
 
                 console = Console()
                 console.print(table)
@@ -173,7 +186,7 @@ class Controller:
                     if search_tournament[0]["rounds"][i] == "ROUND 4":
                         search_tournament[0]["joueurs"].sort(key=lambda x: (x.get("score")), reverse=True)
 
-                        print("<------------Classement des joueurs de fin de tournoi------------->")
+                        print("-------Classement des joueurs de fin de tournoi--------")
 
                         table2 = Table()
                         table2.add_column("prenom", justify="center", style="cyan", no_wrap=True)
@@ -186,6 +199,9 @@ class Controller:
 
                         console2 = Console()
                         console2.print(table2)
+                        question_description = Prompt.ask("[bold blue] Ajouter une description")
+                        self.tournaments_table.update({"description": question_description}, verif.nom ==
+                                                      search_tournament[0]["nom"])
                         self.view.return_menu(self.menu, self.create_round)
 
                 self.first_round(search_tournament)
@@ -217,7 +233,7 @@ class Controller:
         search_tournament[0]["joueurs"].sort(key=lambda x: x.get("classement"))
         sup_moitie = search_tournament[0]["joueurs"][:4]
         inf_moitie = search_tournament[0]["joueurs"][4:]
-
+        print("Joueurs:")
         self.display_style_players_database(search_tournament[0]["joueurs"])
 
         Matchs = self.matchs()
@@ -228,12 +244,12 @@ class Controller:
             Matchs.matchs.append(match)
 
         for m in Matchs.matchs:
-            print("<------------Match----------->")
+            print("-------------Match------------")
             print(m)
 
-            result_match_first_players = float(input(f"resultat du match pour {m[0][0]}: "))
+            result_match_first_players = float(Prompt.ask(f"[bold blue]resultat du match pour {m[0][0]}: "))
 
-            result_match_last_players = float(input(f"resultat du match pour {m[1][0]}: "))
+            result_match_last_players = float(Prompt.ask(f"[bold blue]resultat du match pour {m[1][0]}: "))
 
             for i in search_tournament[0]["joueurs"]:
                 if i["prenom"] == m[0][0]:
@@ -243,7 +259,7 @@ class Controller:
                     i["score"] += result_match_last_players
                     m[1][1] = i["score"]
 
-            print("<----------Résultat du match----------->")
+            print("-------------Résultat du Match------------")
             print(m)
 
         rounds.matchs = Matchs.matchs
@@ -260,7 +276,7 @@ class Controller:
         search_tournament[0]["rounds"] = [rounds.name, rounds.heure_start, rounds.date_start,
                                           rounds.matchs, rounds.heure_end, rounds.date_end]
 
-        print("<---------------Round 1 terminée-------------------------->")
+        print("--------------Round 1 terminé----------------")
 
     # Create a round after the first round
     def after_first_round(self, search_tournament):
@@ -269,7 +285,7 @@ class Controller:
         while search_tournament[0]["number_round"] > round:
             round += 1
 
-            print(f"<--------------Round {round} commencé---------------->")
+            print(f"--------------Round {round} commencé----------------")
             rounds = self.rounds(
                 f"ROUND {round}",
                 self.view.prompt_heure_start_round(),
@@ -297,12 +313,12 @@ class Controller:
                 print(m)
 
             for m in Matchs.matchs:
-                print("<------------Match----------->")
+                print("------------Match-----------")
                 print(m)
 
-                result_match_first_players = float(input(f"resultat du match pour {m[0][0]}: "))
+                result_match_first_players = float(Prompt.ask(f"[bold blue]resultat du match pour {m[0][0]}: "))
 
-                result_match_last_players = float(input(f"resultat du match pour {m[1][0]}: "))
+                result_match_last_players = float(Prompt.ask(f"[bold blue]resultat du match pour {m[1][0]}: "))
 
                 for i in search_tournament[0]["joueurs"]:
                     if i["prenom"] == m[0][0]:
@@ -312,11 +328,10 @@ class Controller:
                         i["score"] += result_match_last_players
                         m[1][1] = i["score"]
 
-                print("<----------Résultat du match----------->")
+                print("----------Résultat du match-----------")
                 print(m)
 
             rounds.matchs = Matchs.matchs
-            self.print_players_score_ranking(search_tournament)
             rounds.heure_end = self.view.prompt_heure_end_round()
             rounds.date_end = self.view.prompt_date_end_round(self.view.prompt_date_end_round)
             for i in self.tournaments_table.all():
@@ -329,16 +344,14 @@ class Controller:
                     "joueurs": search_tournament[0]["joueurs"]},
                     verif.nom == search_tournament[0]["nom"])
 
-            print(f"<------------Round {round} terminée------------------>")
+            print(f"------------Round {round} terminée------------------")
             if round == 4:
                 self.view.return_menu(self.menu, self.create_round)
 
-    @staticmethod
-    def print_players_score_ranking(search_tournament):
+    def print_players_score_ranking(self, search_tournament):
         search_tournament[0]["joueurs"].sort(key=lambda x: (x.get("score"), x.get("classement")))
-        print("<------------Classement des joueurs------------->")
-        for i in search_tournament[0]["joueurs"]:
-            print(i)
+        print("Joueurs:")
+        self.display_style_players_database(search_tournament[0]["joueurs"])
 
     def display_style_players_database(self, players):
         table = Table()

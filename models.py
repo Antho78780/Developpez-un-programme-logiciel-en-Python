@@ -16,7 +16,7 @@ class Players:
 
 # Tournaments models
 class Tournaments:
-    def __init__(self, name, lieu, date, time, number_round=4):
+    def __init__(self, name, lieu, date, time, number_round=4, description=""):
         self.name = name
         self.lieu = lieu
         self.date = date
@@ -24,7 +24,7 @@ class Tournaments:
         self.number_round = number_round
         self.rounds = []
         self.add_player = []
-        self.description = ""
+        self.description = description
 
 
 # Rounds models
