@@ -284,4 +284,4 @@ class View:
 
     @staticmethod
     def phrasing_tournament():
-        print("[bold red]Tournoi introuvable")
+        print("[bold red]Aucun tournois créer")
