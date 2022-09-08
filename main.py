@@ -1,9 +1,12 @@
 from controller import Controller
-from models import Players
-from models import Tournaments
-from models import Rounds
-from models import Matchs
 from view import View
+from models import Players, Tournaments, Rounds, Matchs
+from rich.console import Console
+from rich.table import Table
+from rich import print
+from rich.tree import Tree
+from rich.prompt import Prompt
+from tinydb import TinyDB, Query
 
-controller = Controller(Players, Tournaments, Rounds, Matchs, View)
+controller = Controller(View, Players, Tournaments, Rounds, Matchs, Console, Table, print, Tree, Prompt, TinyDB, Query)
 controller.run()
