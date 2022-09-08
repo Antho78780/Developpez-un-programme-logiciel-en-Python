@@ -1,9 +1,8 @@
 import re
 from rich.console import Console
-from rich.table import Table
 from rich import print
 from rich.prompt import Prompt
-
+from rich.table import Table
 verif_first_name = "^[A-Za-z]+$"
 verif_date = "^[0-9]{1,2}\\/[0-9]{1,2}\\/[0-9]{4}$"
 
@@ -284,4 +283,4 @@ class View:
 
     @staticmethod
     def phrasing_tournament():
-        print("[bold red]Aucun tournois créer")
+        print("[bold red]Tournoi introuvable")
