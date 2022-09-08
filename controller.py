@@ -1,10 +1,13 @@
 class Controller:
-    def __init__(self, Players, Tournaments, Rounds, Matchs, View, Console, Table, print,Tree, Prompt, Tinydb, Query):
+    def __init__(self, Players, Tournaments, Rounds, Matchs, Console, Table, print, Prompt, Tree, Tinydb, Query, View):
         # Models
         self.players = Players
         self.tournaments = Tournaments
         self.rounds = Rounds
         self.matchs = Matchs
+
+        # View
+        self.view = View
 
         #Rich
         self.console = Console
@@ -12,9 +15,6 @@ class Controller:
         self.print = print
         self.prompt = Prompt
         self.tree = Tree
-
-        # View
-        self.view = View
 
         # DATABASE
         self.tinydb = Tinydb
