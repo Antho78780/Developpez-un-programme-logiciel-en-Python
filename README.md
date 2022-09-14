@@ -22,7 +22,7 @@ venv/scripts/activate
 pip install -r requirements.txt
 
 to run a flake8 report
-flake8 --format=html --htmldir=flake_report
+flake8 --format=html --htmldir=flake_report --max-line-length 119
 
 ## Usage
 to run the script use the python command main.py
