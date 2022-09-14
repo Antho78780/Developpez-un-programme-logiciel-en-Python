@@ -22,6 +22,7 @@ venv/scripts/activate
 pip install -r requirements.txt
 
 to run a flake8 report
+cd flake8_rapport
 flake8 --format=html --htmldir=flake_report --max-line-length 119
 
 ## Usage
@@ -44,5 +45,9 @@ and if you enter four you return to the previous menu
 If you enter three you access the reports.
 
 And if you enter four you leave the terminal
+
+## Author
+-Anthony
+-Github Profile @Antho78780
 
 
