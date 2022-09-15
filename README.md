@@ -48,6 +48,6 @@ And if you enter four you leave the terminal
 
 ## Author
 List the author(s) of the project here!
-* **Anthony Audrain** _alias_ [@Antho78780] (https://github.com/Antho78780)
+* **Anthony Audrain** _alias_ [@Antho78780](https://github.com/Antho78780)
 
 
