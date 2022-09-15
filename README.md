@@ -47,7 +47,7 @@ If you enter three you access the reports.
 And if you enter four you leave the terminal
 
 ## Author
--Anthony
--Github Profile @Antho78780
+List the author(s) of the project here!
+* **Anthony Audrain** alias [@Antho78780] (https://github.com/Antho78780)
 
 
