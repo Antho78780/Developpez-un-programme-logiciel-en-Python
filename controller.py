@@ -72,6 +72,7 @@ class Controller:
             self.print(f"Il y a {len(self.tournaments_table.all())} tournois enregistrés")
         else:
             self.print(f"[bold green]Il y a {len(self.tournaments_table.all())} tournoi enregistré")
+
         for i in self.tournaments_table.all():
             i["joueurs"].sort(key=lambda x: (x["classement"], x["prenom"]))
             rounds = i["rounds"]
@@ -83,33 +84,33 @@ class Controller:
             joueurs = i["joueurs"]
             joueurs.sort(key=lambda x: (x.get("prenom"), x.get("classement")))
 
-            table = self.table()
-            table2 = self.table()
-            table3 = self.table()
-            table.add_column("Nom du Tournoi", justify="center", style="cyan", no_wrap=True)
-            table.add_column("Lieu", justify="center", style="cyan", no_wrap=True)
-            table.add_column("Date", justify="center", style="cyan", no_wrap=True)
-            table.add_column("Temps", justify="center", style="cyan", no_wrap=True)
-            table.add_column("Nombre de rounds", justify="center", style="cyan", no_wrap=True)
-            table.add_row(name, lieu, date, time, str(number_rounds))
+            table_tournaments = self.table()
+            table_players = self.table()
+            table_rounds = self.table()
+            table_tournaments.add_column("Nom du Tournoi", justify="center", style="cyan", no_wrap=True)
+            table_tournaments.add_column("Lieu", justify="center", style="cyan", no_wrap=True)
+            table_tournaments.add_column("Date", justify="center", style="cyan", no_wrap=True)
+            table_tournaments.add_column("Temps", justify="center", style="cyan", no_wrap=True)
+            table_tournaments.add_column("Nombre de rounds", justify="center", style="cyan", no_wrap=True)
+            table_tournaments.add_row(name, lieu, date, time, str(number_rounds))
 
-            table2.add_column("Joueurs", justify="center", style="cyan", no_wrap=True)
-            table2.add_column("Classement", justify="center", style="cyan", no_wrap=True)
+            table_players.add_column("Joueurs", justify="center", style="cyan", no_wrap=True)
+            table_players.add_column("Classement", justify="center", style="cyan", no_wrap=True)
             for a in joueurs:
-                table2.add_row(a["prenom"], str(a["classement"]))
+                table_players.add_row(a["prenom"], str(a["classement"]))
 
-            table3.add_column("Match", justify="center", style="cyan", no_wrap=True)
-            test = 0
+            table_rounds.add_column("Match", justify="center", style="cyan", no_wrap=True)
+            numero_round = 0
             for a in rounds[3], rounds[9], rounds[15], rounds[21]:
-                test += 1
-                table3.add_row(f"[bold green]Round { test}:[/] {a[0][0][0]} vs {a[0][1][0]},"
+                numero_round += 1
+                table_rounds.add_row(f"[bold green]Round { numero_round}:[/] {a[0][0][0]} vs {a[0][1][0]},"
                                f" {a[1][0][0]} vs {a[1][1][0]}, {a[2][0][0]} vs {a[2][1][0]},"
                                f" {a[3][0][0]} vs {a[3][1][0]}")
-            arbre = self.tree("Tournoi")
-            arbre.add(table)
-            arbre.add(table2)
-            arbre.add(table3)
-            self.print(arbre)
+            arbre_tournaments = self.tree("Tournoi")
+            arbre_tournaments.add(table_tournaments)
+            arbre_tournaments.add(table_players)
+            arbre_tournaments.add(table_rounds)
+            self.print(arbre_tournaments)
 
         self.view.return_menu(self.menu, self.rapports)
 
