@@ -10,7 +10,7 @@ verif_date = "^[0-9]{1,2}\\/[0-9]{1,2}\\/[0-9]{4}$"
 class View:
     @staticmethod
     def prompt_userName_player(reset_first_name):
-        first_name = Prompt.ask("[bold blue]Saisisez le prenom du joueur: ")
+        first_name = Prompt.ask("[bold blue]Saisisez le prenom du joueur")
         if re.match(verif_first_name, first_name):
             return first_name
         else:
@@ -19,7 +19,7 @@ class View:
 
     @staticmethod
     def prompt_name_player(reset_name):
-        name = Prompt.ask("[bold blue]Saisisez le nom du joueur: ")
+        name = Prompt.ask("[bold blue]Saisisez le nom du joueur")
         if re.match(verif_first_name, name):
             return name
         else:
@@ -28,7 +28,7 @@ class View:
 
     @staticmethod
     def prompt_dateBirth_player(reset_date_birth):
-        date_birth = Prompt.ask("[bold blue]Saisisez la date de naissance du joueur: ")
+        date_birth = Prompt.ask("[bold blue]Saisisez la date de naissance du joueur")
         if re.match(verif_date, date_birth):
             return date_birth
         else:
@@ -37,7 +37,7 @@ class View:
 
     @staticmethod
     def prompt_sex_player(reset_sex):
-        sex = Prompt.ask("[bold blue]Saisisez la civilité du joueur: ")
+        sex = Prompt.ask("[bold blue]Saisisez la civilité du joueur")
         verif_genre = "^[e-oE-O]+$"
         if re.match(verif_genre, sex):
             return sex
@@ -47,7 +47,7 @@ class View:
 
     @staticmethod
     def prompt_ranking_player():
-        ranking = int(Prompt.ask("[bold blue]Saisisez le classement du joueur: "))
+        ranking = int(Prompt.ask("[bold blue]Saisisez le classement du joueur"))
         if ranking == 0:
             return ranking
         else:
@@ -55,7 +55,7 @@ class View:
 
     @staticmethod
     def prompt_name_tournament(reset_name):
-        name = Prompt.ask("[bold blue]Saisisez le nom du tournoi: ")
+        name = Prompt.ask("[bold blue]Saisisez le nom du tournoi")
         if re.match(verif_first_name, name):
             return name
         else:
@@ -64,7 +64,7 @@ class View:
 
     @staticmethod
     def prompt_lieu_tournament(reset_lieu):
-        lieu = Prompt.ask("[bold blue]Saisisez le lieu du tournoi: ")
+        lieu = Prompt.ask("[bold blue]Saisisez le lieu du tournoi")
         if re.match(verif_first_name, lieu):
             return lieu
         else:
@@ -73,7 +73,7 @@ class View:
 
     @staticmethod
     def prompt_date_tournament(reset_date):
-        date = Prompt.ask("[bold blue]Saisisez la date du tournoi: ")
+        date = Prompt.ask("[bold blue]Saisisez la date du tournoi")
         if re.match(verif_date, date):
             return date
         else:
@@ -87,8 +87,8 @@ class View:
             return_menu(menu, cr_tr)
         else:
             while len(add_player) < 8:
-                first_name = Prompt.ask(f"[bold blue]Entrez le prenom du joueur{len(add_player) +1}: ")
-                name = Prompt.ask(f"[bold blue]Entrez le nom du joueur{len(add_player) +1}: ")
+                first_name = Prompt.ask(f"[bold blue]Entrez le prenom du joueur{len(add_player) +1}")
+                name = Prompt.ask(f"[bold blue]Entrez le nom du joueur{len(add_player) +1}")
                 recupFirst_name = players.search(player.prenom == first_name)
                 recup_name = players.search(player.nom == name)
                 if recupFirst_name and recup_name:
@@ -98,7 +98,7 @@ class View:
 
     @staticmethod
     def prompt_time_tournament(reset_time):
-        time = Prompt.ask("[bold blue]Saisisez le temps du tournoi(bullet,blitz,coup-rapide):")
+        time = Prompt.ask("[bold blue]Saisisez le temps du tournoi(bullet,blitz,coup-rapide)")
         if time == "bullet" or time == "Bullet" or time == "BULLET":
             return time
         elif time == "blitz" or time == "Blitz" or time == "BLITZ":
@@ -108,6 +108,21 @@ class View:
         else:
             print("[bold red]Information incorrect")
             return reset_time(reset_time)
+
+    @staticmethod
+    def promptEditRank(query, players, return_menu, menu_players, editPlayers):
+        test = query()
+        first_name = Prompt.ask("[bold blue]Saissisez le prenom du joueur")
+        name = Prompt.ask("[bold blue]Saissisez le nom du joueur")
+        if players.search(test.prenom == first_name) and players.search(test.nom == name):
+            rank = int(Prompt.ask(f"[bold blue]Rentrer le nouveau classement de {first_name} {name}"))
+            players.update({"classement": rank}, test.prenom == first_name)
+            print("[bold green]Classement mis à jour")
+            return_menu(menu_players, editPlayers)
+
+        else:
+            print("[bold red]Joueur introuvable")
+            return_menu(menu_players, editPlayers)
 
     @staticmethod
     def menu(menu1, menu2, menu3):
@@ -135,13 +150,14 @@ class View:
             View.menu(menu1, menu2, menu3)
 
     @staticmethod
-    def menu_player(menu1, menu2, menu3):
+    def menu_player(menu1, menu2, menu3, menu4):
 
         table = Table()
         table.add_column("MENU JOUEURS", justify="center", style="cyan", no_wrap=True)
         table.add_row("1: Ajout de joueur")
         table.add_row("2: Joueurs enregistrés")
-        table.add_row("3: Retour")
+        table.add_row("3: Modifier le classement d'un joueur")
+        table.add_row("4: Retour")
         console = Console()
         console.print(table)
 
@@ -152,6 +168,8 @@ class View:
             menu2()
         elif question == 3:
             menu3()
+        elif question == 4:
+            menu4()
         else:
             print("[bold red]Information incorrect")
             View.menu_player(menu1, menu2, menu3)
