@@ -103,9 +103,9 @@ class Controller:
             numero_round = 0
             for a in rounds[3], rounds[9], rounds[15], rounds[21]:
                 numero_round += 1
-                table_rounds.add_row(f"[bold green]Round { numero_round}:[/] {a[0][0][0]} vs {a[0][1][0]},"
-                               f" {a[1][0][0]} vs {a[1][1][0]}, {a[2][0][0]} vs {a[2][1][0]},"
-                               f" {a[3][0][0]} vs {a[3][1][0]}")
+                table_rounds.add_row(f"[bold green]Round {numero_round}:[/] {a[0][0][0]} vs {a[0][1][0]},"
+                                     f" {a[1][0][0]} vs {a[1][1][0]}, {a[2][0][0]} vs {a[2][1][0]},"
+                                     f" {a[3][0][0]} vs {a[3][1][0]}")
             arbre_tournaments = self.tree("Tournoi")
             arbre_tournaments.add(table_tournaments)
             arbre_tournaments.add(table_players)
@@ -195,7 +195,7 @@ class Controller:
                 self.print("[bold green]Vous avez accès au tournoi")
                 for i in range(len(search_tournament[0]["rounds"])):
                     if search_tournament[0]["rounds"][i] == "ROUND 4":
-                        search_tournament[0]["joueurs"].sort(key=lambda x: x.get("score"), reverse=True)
+                        search_tournament[0]["joueurs"].sort(key=lambda x: (x.get("classement"), x.get("score")))
 
                         self.print("-------Classement des joueurs de fin de tournoi--------")
 
@@ -306,16 +306,16 @@ class Controller:
             )
             self.print_players_score_ranking(search_tournament)
 
-            match1 = [search_tournament[0]["joueurs"][0]["prenom"]] + [search_tournament[0]["joueurs"][0]["score"]],\
+            match1 = [search_tournament[0]["joueurs"][0]["prenom"]] + [search_tournament[0]["joueurs"][0]["score"]], \
                      [search_tournament[0]["joueurs"][1]["prenom"]] + [search_tournament[0]["joueurs"][1]["score"]]
 
-            match2 = [search_tournament[0]["joueurs"][2]["prenom"]] + [search_tournament[0]["joueurs"][2]["score"]],\
+            match2 = [search_tournament[0]["joueurs"][2]["prenom"]] + [search_tournament[0]["joueurs"][2]["score"]], \
                      [search_tournament[0]["joueurs"][3]["prenom"]] + [search_tournament[0]["joueurs"][3]["score"]]
 
-            match3 = [search_tournament[0]["joueurs"][4]["prenom"]] + [search_tournament[0]["joueurs"][4]["score"]],\
+            match3 = [search_tournament[0]["joueurs"][4]["prenom"]] + [search_tournament[0]["joueurs"][4]["score"]], \
                      [search_tournament[0]["joueurs"][5]["prenom"]] + [search_tournament[0]["joueurs"][5]["score"]]
 
-            match4 = [search_tournament[0]["joueurs"][6]["prenom"]] + [search_tournament[0]["joueurs"][6]["score"]],\
+            match4 = [search_tournament[0]["joueurs"][6]["prenom"]] + [search_tournament[0]["joueurs"][6]["score"]], \
                      [search_tournament[0]["joueurs"][7]["prenom"]] + [search_tournament[0]["joueurs"][7]["score"]]
 
             all_match = [match1, match2, match3, match4]
@@ -383,7 +383,7 @@ class Controller:
 
     # Player menu display
     def menu_player(self):
-        self.view.menu_player(self.create_player, self.get_players_database,self.editRankPlayer, self.menu)
+        self.view.menu_player(self.create_player, self.get_players_database, self.editRankPlayer, self.menu)
 
     # Tournament menu display
     def menu_tournament(self):
