@@ -118,7 +118,7 @@ class Controller:
     def get_players_database(self):
         if not self.players_table.all() == []:
             trie_first_name = self.players_table.all()
-            trie_first_name.sort(key=lambda x: x.get("prenom", x.get("classement")))
+            trie_first_name.sort(key=lambda x: x.get("classement"))
             self.display_style_players_database(trie_first_name)
 
             self.view.phrasing_len_players(self.players_table.all)
@@ -135,6 +135,10 @@ class Controller:
         else:
             self.view.phrasing_none_players()
             self.view.return_menu(self.menu, self.get_players_database)
+
+    def editRankPlayer(self):
+        self.view.promptEditRank(self.query, self.players_table, self.view.return_menu, self.menu_player,
+                                 self.editRankPlayer)
 
     # Display of all registered tournaments
     def get_tournaments_database(self):
@@ -206,10 +210,13 @@ class Controller:
 
                         console2 = self.console()
                         console2.print(table2)
-                        question_description = self.prompt.ask("[bold blue] Ajouter une description")
-                        self.tournaments_table.update({"description": question_description}, verif.nom ==
-                                                      search_tournament[0]["nom"])
-                        self.view.return_menu(self.menu, self.create_round)
+                        if search_tournament[0]["description"] != "":
+                            self.view.return_menu(self.menu, self.create_round)
+                        else:
+                            question_description = self.prompt.ask("[bold blue] Ajouter une description")
+                            self.tournaments_table.update({"description": question_description}, verif.nom ==
+                                                          search_tournament[0]["nom"])
+                            self.view.return_menu(self.menu, self.create_round)
 
                 self.first_round(search_tournament)
                 self.after_first_round(search_tournament)
@@ -376,7 +383,7 @@ class Controller:
 
     # Player menu display
     def menu_player(self):
-        self.view.menu_player(self.create_player, self.get_players_database, self.menu)
+        self.view.menu_player(self.create_player, self.get_players_database,self.editRankPlayer, self.menu)
 
     # Tournament menu display
     def menu_tournament(self):
