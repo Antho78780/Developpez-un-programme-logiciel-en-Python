@@ -1,4 +1,4 @@
-from controller import Controller
+from controller import ControllerGen
 from models import Players, Tournaments, Rounds, Matchs
 from view import View
 from rich.console import Console
@@ -8,5 +8,5 @@ from rich.tree import Tree
 from rich.prompt import Prompt
 from tinydb import TinyDB, Query
 
-controller = Controller(Players, Tournaments, Rounds, Matchs, View, Console, Table, print, Tree, Prompt, TinyDB, Query)
+controller = ControllerGen(Players, Tournaments, Rounds, Matchs, View, Console, Table, print, Tree, Prompt, TinyDB, Query)
 controller.run()
