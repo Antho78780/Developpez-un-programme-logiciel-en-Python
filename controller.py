@@ -332,19 +332,42 @@ class ControllerGen(Controller):
             Matchs = self.matchs()
             Matchs.matchs = all_match
 
-            for m in Matchs.matchs:
-                self.print(m)
-            if round == 2:
-                for t in search_tournament[0]["rounds"][3]:
-                    print(match1)
-                    print(t)
+            if round == 3:
+                test1 = match1[0][0], match1[1][0]
+                test2 = match1[0][0], match1[1][0]
+                test3 = match1[0][0], match1[1][0]
+                test4 = match1[0][0], match1[1][0]
 
-            elif round == 3:
-                for t in search_tournament[0]["rounds"][3]:
-                    print(t)
-            elif round == 4:
-                for t in search_tournament[0]["rounds"][3]:
-                    print(t)
+                for t in search_tournament[0]["rounds"][9]:
+                    test_1 = t[0][0], t[1][0]
+                    test_2 = t[0][0], t[1][0]
+                    test_3 = t[0][0], t[1][0]
+                    test_4 = t[0][0], t[1][0]
+                    if test1 == test_1 or test2 == test_2:
+                        match1 = [search_tournament[0]["joueurs"][0]["prenom"]] + [
+                            search_tournament[0]["joueurs"][0]["score"]], \
+                                 [search_tournament[0]["joueurs"][2]["prenom"]] + [
+                                     search_tournament[0]["joueurs"][2]["score"]]
+
+                        match2 = [search_tournament[0]["joueurs"][1]["prenom"]] + [
+                            search_tournament[0]["joueurs"][1]["score"]], \
+                                 [search_tournament[0]["joueurs"][3]["prenom"]] + [
+                                     search_tournament[0]["joueurs"][3]["score"]]
+
+                    if test3 == test_3 or test4 == test_4:
+                        match3 = [search_tournament[0]["joueurs"][4]["prenom"]] + [
+                            search_tournament[0]["joueurs"][4]["score"]], \
+                                 [search_tournament[0]["joueurs"][6]["prenom"]] + [
+                                     search_tournament[0]["joueurs"][6]["score"]]
+
+                        match4 = [search_tournament[0]["joueurs"][5]["prenom"]] + [
+                            search_tournament[0]["joueurs"][5]["score"]], \
+                                 [search_tournament[0]["joueurs"][7]["prenom"]] + [
+                                     search_tournament[0]["joueurs"][7]["score"]]
+
+                    all_match = [match1, match2, match3, match4]
+                    Matchs = self.matchs()
+                    Matchs.matchs = all_match
 
             for m in Matchs.matchs:
                 self.print("------------Match-----------")
