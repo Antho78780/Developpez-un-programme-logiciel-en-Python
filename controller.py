@@ -315,59 +315,56 @@ class ControllerGen(Controller):
                 self.view.prompt_date_start_round(self.view.prompt_date_start_round),
             )
             self.print_players_score_ranking(search_tournament)
+            joueur1 = [search_tournament[0]["joueurs"][0]["prenom"]] + [search_tournament[0]["joueurs"][0]["score"]]
+            joueur2 = [search_tournament[0]["joueurs"][1]["prenom"]] + [search_tournament[0]["joueurs"][1]["score"]]
+            joueur3 = [search_tournament[0]["joueurs"][2]["prenom"]] + [search_tournament[0]["joueurs"][2]["score"]]
+            joueur4 = [search_tournament[0]["joueurs"][3]["prenom"]] + [search_tournament[0]["joueurs"][3]["score"]]
+            joueur5 = [search_tournament[0]["joueurs"][4]["prenom"]] + [search_tournament[0]["joueurs"][4]["score"]]
+            joueur6 = [search_tournament[0]["joueurs"][5]["prenom"]] + [search_tournament[0]["joueurs"][5]["score"]]
+            joueur7 = [search_tournament[0]["joueurs"][6]["prenom"]] + [search_tournament[0]["joueurs"][6]["score"]]
+            joueur8 = [search_tournament[0]["joueurs"][7]["prenom"]] + [search_tournament[0]["joueurs"][7]["score"]]
 
-            match1 = [search_tournament[0]["joueurs"][0]["prenom"]] + [search_tournament[0]["joueurs"][0]["score"]], \
-                     [search_tournament[0]["joueurs"][1]["prenom"]] + [search_tournament[0]["joueurs"][1]["score"]]
-
-            match2 = [search_tournament[0]["joueurs"][2]["prenom"]] + [search_tournament[0]["joueurs"][2]["score"]], \
-                     [search_tournament[0]["joueurs"][3]["prenom"]] + [search_tournament[0]["joueurs"][3]["score"]]
-
-            match3 = [search_tournament[0]["joueurs"][4]["prenom"]] + [search_tournament[0]["joueurs"][4]["score"]], \
-                     [search_tournament[0]["joueurs"][5]["prenom"]] + [search_tournament[0]["joueurs"][5]["score"]]
-
-            match4 = [search_tournament[0]["joueurs"][6]["prenom"]] + [search_tournament[0]["joueurs"][6]["score"]], \
-                     [search_tournament[0]["joueurs"][7]["prenom"]] + [search_tournament[0]["joueurs"][7]["score"]]
+            match1 = [joueur1, joueur2]
+            match2 = [joueur3, joueur4]
+            match3 = [joueur5, joueur6]
+            match4 = [joueur7, joueur8]
 
             all_match = [match1, match2, match3, match4]
             Matchs = self.matchs()
             Matchs.matchs = all_match
 
             if round == 3:
-                test1 = match1[0][0], match1[1][0]
-                test2 = match1[0][0], match1[1][0]
-                test3 = match1[0][0], match1[1][0]
-                test4 = match1[0][0], match1[1][0]
+                for i in search_tournament[0]["rounds"][9]:
+                    if match1 == i or match2 == i:
+                        newMatch1 = [joueur1, joueur3]
+                        newMatch2 = [joueur2, joueur4]
+                        all_match[0] = newMatch1
+                        all_match[1] = newMatch2
 
-                for t in search_tournament[0]["rounds"][9]:
-                    test_1 = t[0][0], t[1][0]
-                    test_2 = t[0][0], t[1][0]
-                    test_3 = t[0][0], t[1][0]
-                    test_4 = t[0][0], t[1][0]
-                    if test1 == test_1 or test2 == test_2:
-                        match1 = [search_tournament[0]["joueurs"][0]["prenom"]] + [
-                            search_tournament[0]["joueurs"][0]["score"]], \
-                                 [search_tournament[0]["joueurs"][2]["prenom"]] + [
-                                     search_tournament[0]["joueurs"][2]["score"]]
+                    if match3 == i or match4 == i:
+                        newMatch3 = [joueur5, joueur7]
+                        newMatch4 = [joueur6, joueur8]
+                        all_match[2] = newMatch3
+                        all_match[3] = newMatch4
 
-                        match2 = [search_tournament[0]["joueurs"][1]["prenom"]] + [
-                            search_tournament[0]["joueurs"][1]["score"]], \
-                                 [search_tournament[0]["joueurs"][3]["prenom"]] + [
-                                     search_tournament[0]["joueurs"][3]["score"]]
+            if round == 4:
+                for i in search_tournament[0]["rounds"][15]:
+                    match1 = [joueur1, joueur3]
+                    match2 = [joueur2, joueur4]
+                    match3 = [joueur5, joueur6]
+                    match4 = [joueur7, joueur8]
 
-                    if test3 == test_3 or test4 == test_4:
-                        match3 = [search_tournament[0]["joueurs"][4]["prenom"]] + [
-                            search_tournament[0]["joueurs"][4]["score"]], \
-                                 [search_tournament[0]["joueurs"][6]["prenom"]] + [
-                                     search_tournament[0]["joueurs"][6]["score"]]
+                    if match1 == i or match2 == i:
+                        newMatch1 = [joueur1, joueur4]
+                        newMatch2 = [joueur3, joueur2]
+                        all_match[0] = newMatch1
+                        all_match[1] = newMatch2
 
-                        match4 = [search_tournament[0]["joueurs"][5]["prenom"]] + [
-                            search_tournament[0]["joueurs"][5]["score"]], \
-                                 [search_tournament[0]["joueurs"][7]["prenom"]] + [
-                                     search_tournament[0]["joueurs"][7]["score"]]
-
-                    all_match = [match1, match2, match3, match4]
-                    Matchs = self.matchs()
-                    Matchs.matchs = all_match
+                    if match3 == i or match4 == i:
+                        newMatch3 = [joueur5, joueur8]
+                        newMatch4 = [joueur6, joueur7]
+                        all_match[2] = newMatch3
+                        all_match[3] = newMatch4
 
             for m in Matchs.matchs:
                 self.print("------------Match-----------")
