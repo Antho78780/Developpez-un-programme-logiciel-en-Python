@@ -1,7 +1,7 @@
 class Controller:
-    def __init__(self, View, Console, Table, print, Tree, Prompt, TinyDB, Query):
+    def __init__(self, Views, Console, Table, print, Tree, Prompt, TinyDB, Query):
         # view
-        self.view = View
+        self.views = Views
         # Rich
         self.console = Console
         self.table = Table
@@ -17,10 +17,9 @@ class Controller:
 
 
 class ControllerGen(Controller):
-    def __init__(self, Players, Tournaments, Rounds, Matchs, View, Console, Table, print, Tree, Prompt, TinyDB, Query):
+    def __init__(self, Players, Tournaments, Rounds, Matchs, Views, Console, Table, print, Tree, Prompt, TinyDB, Query):
+        super().__init__(Views, Console, Table, print, Tree, Prompt, TinyDB, Query)
         # Models
-        super().__init__(View, Console, Table, print, Tree, Prompt, TinyDB, Query)
-
         self.players = Players
         self.tournaments = Tournaments
         self.rounds = Rounds
@@ -28,11 +27,11 @@ class ControllerGen(Controller):
 
     def create_player(self):
         players = self.players(
-            self.view.prompt_userName_player(self.view.prompt_userName_player),
-            self.view.prompt_name_player(self.view.prompt_name_player),
-            self.view.prompt_dateBirth_player(self.view.prompt_dateBirth_player),
-            self.view.prompt_sex_player(self.view.prompt_sex_player),
-            self.view.prompt_ranking_player()
+            self.views.prompt_userName_player(),
+            self.views.prompt_name_player(),
+            self.views.prompt_dateBirth_player(),
+            self.views.prompt_sex_player(),
+            self.views.prompt_ranking_player()
         )
         player_serialized = {
             "prenom": players.first_name,
@@ -43,7 +42,8 @@ class ControllerGen(Controller):
             "score": players.score
         }
         self.players_table.insert(player_serialized)
-        self.view.phrasing_create_player()
+        self.views.phrasing_create_player()
+        self.views.return_menu(self.menu_player, self.create_player)
 
     def get_players_database(self):
         if not self.players_table.all() == []:
@@ -51,15 +51,15 @@ class ControllerGen(Controller):
             trie_first_name.sort(key=lambda x: x.get("classement"))
 
             self.display_style_players_database(trie_first_name)
-            self.view.phrasing_len_players(self.players_table.all)
-            self.view.return_menu(self.menu, self.get_players_database)
+            self.views.phrasing_len_players(self.players_table.all)
+            self.views.return_menu(self.menu, self.get_players_database)
         else:
-            self.view.phrasing_none_players()
-            self.view.return_menu(self.menu, self.get_players_database)
+            self.views.phrasing_none_players()
+            self.views.return_menu(self.menu, self.get_players_database)
 
     def editRankPlayer(self):
-        self.view.promptEditRank(self.query, self.players_table, self.editRankPlayer, self.editRankPlayer,
-                                 self.editRankPlayer)
+        self.views.promptEditRank(self.query, self.players_table)
+        self.views.return_menu(self.menu_player, self.editRankPlayer)
 
     @staticmethod
     def delete_date_birth_sex(tournament_joueurs):
@@ -101,14 +101,14 @@ class ControllerGen(Controller):
 
     def create_tournament(self):
         tournaments = self.tournaments(
-            self.view.prompt_name_tournament(self.view.prompt_name_tournament),
-            self.view.prompt_lieu_tournament(self.view.prompt_lieu_tournament),
-            self.view.prompt_date_tournament(self.view.prompt_date_tournament),
-            self.view.prompt_time_tournament(self.view.prompt_time_tournament),
+            self.views.prompt_name_tournament(),
+            self.views.prompt_lieu_tournament(),
+            self.views.prompt_date_tournament(),
+            self.views.prompt_time_tournament(),
         )
-        self.view.get_players_tournaments_database(self.get_players_tournament_database)
-        self.view.prompt_add_player(self.query, self.players_table, tournaments.add_player, self.create_tournament,
-                                    self.create_tournament, self.create_tournament)
+        self.get_players_tournament_database()
+        self.views.prompt_add_player(self.query, self.players_table, tournaments.add_player, self.create_tournament,
+                                     self.create_tournament, self.create_tournament)
         serialized_tournament = {
             "nom": tournaments.name,
             "lieu": tournaments.lieu,
@@ -120,7 +120,7 @@ class ControllerGen(Controller):
             "description": tournaments.description
         }
         self.tournaments_table.insert(serialized_tournament)
-        self.view.phrasing_create_tournament()
+        self.views.phrasing_create_tournament()
 
     # Rapports
     def rapports(self):
@@ -128,6 +128,7 @@ class ControllerGen(Controller):
             self.print(f"Il y a {len(self.tournaments_table.all())} tournois enregistrés")
         else:
             self.print(f"[bold green]Il y a {len(self.tournaments_table.all())} tournoi enregistré")
+            self.views.return_menu(self.menu, self.rapports)
 
         for i in self.tournaments_table.all():
             i["joueurs"].sort(key=lambda x: (x["classement"], x["prenom"]))
@@ -172,9 +173,9 @@ class ControllerGen(Controller):
     def get_players_tournament_database(self):
         if not self.players_table.all() == []:
             self.display_style_players_database(self.players_table.all())
-            self.view.phrasing_len_players(self.players_table.all)
+            self.views.phrasing_len_players(self.players_table.all)
         else:
-            self.view.phrasing_none_players()
+            self.views.phrasing_none_players()
 
     # Display of all registered tournaments
     def get_tournaments_database(self):
@@ -200,7 +201,8 @@ class ControllerGen(Controller):
                 console = self.console()
                 console.print(table)
         else:
-            self.view.phrasing_none_tournaments()
+            self.views.phrasing_none_tournaments()
+            self.views.return_menu(self.menu_tournament, self.get_tournaments_database)
 
     # Create round
     def create_round(self):
@@ -213,7 +215,7 @@ class ControllerGen(Controller):
             console = self.console()
             console.print(table)
 
-            search_tournament = self.tournaments_table.search(verif.nom == self.view.prompt_phrasing_name_tournament())
+            search_tournament = self.tournaments_table.search(verif.nom == self.views.prompt_phrasing_name_tournament())
             if search_tournament:
                 self.print("[bold green]Vous avez accès au tournoi")
                 for i in range(len(search_tournament[0]["rounds"])):
@@ -242,16 +244,18 @@ class ControllerGen(Controller):
                 self.first_round(search_tournament)
                 self.after_first_round(search_tournament)
             else:
-                self.view.phrasing_tournament()
+                self.views.phrasing_tournament()
+                self.views.return_menu(self.menu_tournament, self.create_round)
         else:
-            self.view.phrasing_tournament()
+            self.views.phrasing_tournament()
+            self.views.return_menu(self.menu_tournament, self.create_round)
 
     # Create the 1st round
     def first_round(self, search_tournament):
         verif = self.query()
         self.print("[bold green]---Round1 commencé---")
-        rounds = self.rounds("ROUND 1", self.view.prompt_heure_start_round(),
-                             self.view.prompt_date_start_round(self.view.prompt_date_start_round))
+        rounds = self.rounds("ROUND 1", self.views.prompt_heure_start_round(),
+                             self.views.prompt_date_start_round(self.views.prompt_date_start_round))
 
         search_tournament[0]["joueurs"].sort(key=lambda x: x.get("classement"))
         sup_moitie = search_tournament[0]["joueurs"][:4]
@@ -286,8 +290,8 @@ class ControllerGen(Controller):
             self.print(m)
 
         rounds.matchs = Matchs.matchs
-        rounds.heure_end = self.view.prompt_heure_end_round()
-        rounds.date_end = self.view.prompt_date_end_round(self.view.prompt_date_end_round)
+        rounds.heure_end = self.views.prompt_heure_end_round()
+        rounds.date_end = self.views.prompt_date_end_round(self.views.prompt_date_end_round)
         self.tournaments_table.update({
             "rounds": [rounds.name, rounds.heure_start, rounds.date_start,
                        rounds.matchs, rounds.heure_end, rounds.date_end
@@ -311,8 +315,8 @@ class ControllerGen(Controller):
             self.print(f"--------------Round {round} commencé----------------")
             rounds = self.rounds(
                 f"ROUND {round}",
-                self.view.prompt_heure_start_round(),
-                self.view.prompt_date_start_round(self.view.prompt_date_start_round),
+                self.views.prompt_heure_start_round(),
+                self.views.prompt_date_start_round(self.views.prompt_date_start_round),
             )
             self.print_players_score_ranking(search_tournament)
             joueur1 = [search_tournament[0]["joueurs"][0]["prenom"]] + [search_tournament[0]["joueurs"][0]["score"]]
@@ -385,8 +389,8 @@ class ControllerGen(Controller):
                 self.print(m)
 
             rounds.matchs = Matchs.matchs
-            rounds.heure_end = self.view.prompt_heure_end_round()
-            rounds.date_end = self.view.prompt_date_end_round(self.view.prompt_date_end_round)
+            rounds.heure_end = self.views.prompt_heure_end_round()
+            rounds.date_end = self.views.prompt_date_end_round(self.views.prompt_date_end_round)
             for i in self.tournaments_table.all():
                 if verif.nom == search_tournament[0]["nom"]:
                     i["rounds"].extend([
@@ -405,13 +409,13 @@ class ControllerGen(Controller):
                 print("Retour menu")
 
     def menu(self):
-        self.view.menu(self.menu_player, self.menu_tournament)
+        self.views.menu(self.menu_player, self.menu_tournament, self.rapports,)
 
     def menu_player(self):
-        self.view.menu_player(self.create_player, self.get_players_database, self.editRankPlayer, self.menu)
+        self.views.menu_player(self.create_player, self.get_players_database, self.editRankPlayer, self.menu)
 
     def menu_tournament(self):
-        self.view.menu_tournament(self.create_tournament, self.create_round, self.get_tournaments_database, self.menu)
+        self.views.menu_tournament(self.create_tournament, self.create_round, self.get_tournaments_database, self.menu)
 
     def run(self):
         self.menu()
