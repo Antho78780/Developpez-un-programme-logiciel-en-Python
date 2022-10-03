@@ -167,4 +167,3 @@ class PromptPlayer:
         else:
             print("[bold red]Informations incorrect")
             PromptPlayer.return_menu(menu, choice_menu)
-
