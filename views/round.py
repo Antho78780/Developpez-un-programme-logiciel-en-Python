@@ -56,3 +56,27 @@ class PromptRound:
 
         else:
             print("Il y a deja plusieurs rounds qui ont été créer")
+
+    @staticmethod
+    def phrasing_number_round(number_round):
+        if number_round == 1:
+            print("[bold green]Round 1 commencé")
+        elif number_round == 2:
+            print("[bold green]Round 2 commencé")
+        elif number_round == 3:
+            print("[bold green]Round 3 commencé")
+        elif number_round == 4:
+            print("[bold green]Round 4 commencé")
+
+    @staticmethod
+    def phrasing_number_end_round(number_round):
+        if number_round == 1:
+            print("[bold green]Round 1 terminé")
+        elif number_round == 2:
+            print("[bold green]Round 2 terminé")
+        elif number_round == 3:
+            print("[bold green]Round 3 terminé")
+        elif number_round == 4:
+            print("[bold green]Round 4 terminé")
+
+

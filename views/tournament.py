@@ -1,6 +1,4 @@
 import re
-from rich import print
-from rich.prompt import Prompt
 from rich.console import Console
 from rich import print
 from rich.prompt import Prompt
@@ -59,15 +57,22 @@ class PromptTournament:
     def phrasing_none_tournaments():
         print("[bold red]Il n'y a pas de tournois dans la base de donnée")
 
-
     @staticmethod
     def prompt_phrasing_name_tournament():
         tournament = Prompt.ask("[bold blue]Tapez le nom du tournoi: ")
         return tournament
 
     @staticmethod
-    def phrasing_tournament():
-        print("[bold red]Tournoi introuvable")
+    def phrasing_tournament(search_tournament):
+        if search_tournament:
+            print("[bold green]Vous avez accés au tournoi")
+        else:
+            print("[bold red]Tournoi introuvable")
+
+    @staticmethod
+    def phrasing_prompt_description():
+        question_description = Prompt.ask("[bold blue] Ajouter une description")
+        return question_description
 
     @staticmethod
     def menu_tournament(menu1, menu2, menu3, menu4):
@@ -93,6 +98,42 @@ class PromptTournament:
         else:
             print("[bold red]Informations incorrect")
             PromptTournament.menu_tournament(menu1, menu2, menu3, menu4)
+
+    @staticmethod
+    def phrasingRapport(tournament):
+        if len(tournament.all()) > 1:
+            print(f"Il y a {len(tournament.all())} tournois enregistrés")
+        else:
+            print(f"[bold green]Il y a {len(tournament.all())} tournoi enregistré")
+
+    @staticmethod
+    def phrasing_end_ranking():
+        print("-------Classement des joueurs de fin de tournoi--------")
+
+    @staticmethod
+    def print_match():
+        print("-------------Match------------>")
+
+    @staticmethod
+    def print_result_match():
+        print("-------------Résultat du Match------------")
+
+    @staticmethod
+    def return_menu(menu, choice_menu):
+        question = Prompt.ask("[bold blue]Retourner au menu: y/n ")
+        if question == "y" or question == "Y":
+            menu()
+        elif question == "n" or question == "N":
+            choice_menu()
+        else:
+            print("[bold red]Informations incorrect")
+            PromptTournament.return_menu(menu, choice_menu)
+
+    @staticmethod
+    def phrasing_error():
+        print("[bold red]Il n'y a rien dans la base de donnée")
+
+
 
 
 

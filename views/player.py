@@ -167,3 +167,7 @@ class PromptPlayer:
         else:
             print("[bold red]Informations incorrect")
             PromptPlayer.return_menu(menu, choice_menu)
+
+    @staticmethod
+    def phrasing_error():
+        print("Il n'y a rien dans la base de donnée")
