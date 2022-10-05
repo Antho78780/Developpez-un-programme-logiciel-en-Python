@@ -11,9 +11,3 @@ from tinydb import TinyDB, Query
 
 controllerPlayer = Player(Players, PromptPlayer, TinyDB, Query, Table, Console)
 controllerPlayer.menu()
-"""
-controller = Controller(Players, Tournaments, Rounds, Matchs, PromptPlayer, PromptTournament,
-                        PromptRound, Console, Table, print, Tree, Prompt, TinyDB, Query)
-controller.run()
-"""
-
