@@ -1,6 +1,4 @@
 import re
-from rich import print
-from rich.prompt import Prompt
 from rich.console import Console
 from rich import print
 from rich.prompt import Prompt
