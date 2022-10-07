@@ -78,5 +78,3 @@ class PromptRound:
             print("[bold green]Round 3 terminé")
         elif number_round == 4:
             print("[bold green]Round 4 terminé")
-
-

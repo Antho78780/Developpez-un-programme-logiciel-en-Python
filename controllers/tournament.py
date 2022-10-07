@@ -1,6 +1,6 @@
 class Tournament:
-    def __init__(self, modelTournament, modelRounds, modelMatchs, viewTournament, viewPlayer, viewRound,
-                 tinyDB, query, table, console, tree, print, prompt):
+    def __init__(self, modelTournament, modelRounds, modelMatchs, viewTournament, viewPlayer, viewRound, tinyDB, query,
+                 table, console, tree, print, prompt):
         # Model
         self.modelTournament = modelTournament
         self.modelRounds = modelRounds
@@ -30,8 +30,8 @@ class Tournament:
             self.viewTournament.prompt_time_tournament(self.viewTournament.prompt_time_tournament),
         )
         self.get_players_tournament_database()
-        self.viewPlayer.prompt_add_player(self.query, self.players_table, tournaments.add_player, self.create_tournament,
-                                          self.create_tournament, self.create_tournament)
+        self.viewPlayer.prompt_add_player(self.query, self.players_table, tournaments.add_player,
+                                          self.create_tournament, self.create_tournament, self.create_tournament)
         serialized_tournament = {
             "nom": tournaments.name,
             "lieu": tournaments.lieu,
@@ -133,7 +133,6 @@ class Tournament:
         from controllers.round import Round
         comeRound = Round(main.Rounds, main.Matchs, main.PromptPlayer, main.PromptTournament, main.PromptRound,
                           main.TinyDB, main.Query, main.Console, main.Table, main.print, main.Prompt)
-
         self.viewTournament.menu_tournament(self.create_tournament, comeRound.create_round,
                                             self.get_tournaments_database, self.menu)
 
@@ -142,5 +141,3 @@ class Tournament:
         from controllers.player import Player
         comePlayer = Player(main.Players, main.PromptPlayer, main.TinyDB, main.Query, main.Table, main.Console)
         comePlayer.menu()
-
-

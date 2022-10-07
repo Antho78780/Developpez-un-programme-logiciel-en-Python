@@ -136,9 +136,3 @@ class PromptTournament:
     @staticmethod
     def phrasing_error2():
         print("[bold red]Le tournoi n'est pas fini")
-
-
-
-
-
-
