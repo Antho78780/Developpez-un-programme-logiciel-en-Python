@@ -1,23 +1,3 @@
-from models.player import Players
-from models.tournament import Tournaments
-from models.round import Rounds
-from models.match import Matchs
-
-from views.player import PromptPlayer
-from views.tournament import PromptTournament
-from views.round import PromptRound
-
-from tinydb import TinyDB, Query
-
-from rich.table import Table
-from rich.console import Console
-from rich.tree import Tree
-from rich import print
-from rich.prompt import Prompt
-
-from controllers import player
-
-
 class Round:
     def __init__(self, modelRound, modelMatch, viewPlayer, viewTournament,
                  viewRound, tinyDB, query, console, table, print, prompt):
@@ -28,12 +8,12 @@ class Round:
         self.viewPlayer = viewPlayer
         self.viewTournament = viewTournament
         self.viewRound = viewRound
-
+        # Rich
         self.console = console
         self.table = table
         self.print = print
         self.prompt = prompt
-
+        # Database
         self.tinydb = tinyDB
         self.query = query
         self.db = self.tinydb("db.json")
@@ -41,21 +21,19 @@ class Round:
         self.players_table = self.db.table("players")
 
     def create_round(self):
-        from controllers import tournament
-        comeTournament = tournament.Tournament(Tournaments, Rounds, Matchs, PromptTournament,
-                                               PromptPlayer, PromptRound, TinyDB, Query, Table,
-                                               Console, Tree,
-                                               print,
-                                               Prompt)
+        import main
+        from controllers.tournament import Tournament
+        comeTournament = Tournament(main.Tournaments, main.Rounds, main.Matchs, main.PromptTournament,
+                                    main.PromptPlayer, main.PromptRound, main.TinyDB, main.Query, main.Table,
+                                    main.Console, main.Tree, main.print, main.Prompt)
         verif = self.query()
         if not self.tournaments_table.all() == []:
             table = self.table()
             table.add_column("Tournoi", justify="center", style="cyan", no_wrap=True)
-            for tournament in self.tournaments_table.all():
-                table.add_row(tournament["nom"])
+            for tournaments in self.tournaments_table.all():
+                table.add_row(tournaments["nom"])
             console = self.console()
             console.print(table)
-
             search_tournament = self.tournaments_table.search(
                 verif.nom == self.viewTournament.prompt_phrasing_name_tournament())
             if search_tournament:
@@ -103,7 +81,10 @@ class Round:
         search_tournament[0]["joueurs"].sort(key=lambda x: x.get("classement"))
         sup_moitie = search_tournament[0]["joueurs"][:4]
         inf_moitie = search_tournament[0]["joueurs"][4:]
-        comePlayer = player.Player(Players, PromptPlayer, TinyDB, Query, Table, Console)
+
+        import main
+        from controllers.player import Player
+        comePlayer = Player(main.Players, main.PromptPlayer, main.TinyDB, main.Query, main.Table, main.Console)
         comePlayer.display_style_players_database(search_tournament[0]["joueurs"])
 
         Matchs = self.modelMatch()
@@ -149,7 +130,9 @@ class Round:
         self.viewRound.phrasing_number_end_round(1)
 
     def after_first_round(self, search_tournament):
-        comePlayer = player.Player(Players, PromptPlayer, TinyDB, Query, Table, Console)
+        import main
+        from controllers.player import Player
+        comePlayer = Player(main.Players, main.PromptPlayer, main.TinyDB, main.Query, main.Table, main.Console)
         verif = self.query()
         round = 1
         while search_tournament[0]["number_round"] > round:
@@ -229,7 +212,6 @@ class Round:
 
                 self.viewTournament.print_result_match()
                 self.print(m)
-
             rounds.matchs = Matchs.matchs
             rounds.heure_end = self.viewRound.prompt_heure_end_round()
             rounds.date_end = self.viewRound.prompt_date_end_round(self.viewRound.prompt_date_end_round)
