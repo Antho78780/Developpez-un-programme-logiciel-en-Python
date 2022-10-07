@@ -133,6 +133,11 @@ class PromptTournament:
     def phrasing_error():
         print("[bold red]Il n'y a rien dans la base de donnée")
 
+    @staticmethod
+    def phrasing_error2():
+        print("[bold red]Le tournoi n'est pas fini")
+
+
 
 
 
