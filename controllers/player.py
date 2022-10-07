@@ -1,25 +1,3 @@
-from models.tournament import Tournaments
-from models.round import Rounds
-from models.match import Matchs
-
-from views.tournament import PromptTournament
-from views.player import PromptPlayer
-from views.round import PromptRound
-
-from tinydb import TinyDB, Query
-
-from rich.table import Table
-from rich.console import Console
-from rich.tree import Tree
-from rich import print
-from rich.prompt import Prompt
-
-from controllers import tournament
-
-comeTournament = tournament.Tournament(Tournaments, Rounds, Matchs, PromptTournament, PromptPlayer,
-                                       PromptRound, TinyDB, Query, Table, Console, Tree, print, Prompt)
-
-
 class Player:
     def __init__(self, modelPlayer, viewPlayer, tinyDB, query, table, console):
         # Model
@@ -94,4 +72,10 @@ class Player:
         self.viewPlayer.menu_player(self.create_player, self.get_players_database, self.editRankPlayer, self.menu)
 
     def menu(self):
+        import main
+        from controllers.tournament import Tournament
+
+        comeTournament = Tournament(main.Tournaments, main.Rounds, main.Matchs, main.PromptTournament,
+                                    main.PromptPlayer, main.PromptRound, main.TinyDB, main.Query, main.Table,
+                                    main.Console, main.Tree, main.print, main.Prompt)
         self.viewPlayer.menu(self.menu_player, comeTournament.menu_tournament, comeTournament.rapports)
