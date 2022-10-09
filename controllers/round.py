@@ -20,12 +20,9 @@ class Round:
         self.tournaments_table = self.db.table("tournaments")
         self.players_table = self.db.table("players")
 
+    # Créer des rounds
     def create_round(self):
         import main
-        from controllers.tournament import Tournament
-        comeTournament = Tournament(main.Tournaments, main.Rounds, main.Matchs, main.PromptTournament,
-                                    main.PromptPlayer, main.PromptRound, main.TinyDB, main.Query, main.Table,
-                                    main.Console, main.Tree, main.print, main.Prompt)
         verif = self.query()
         if not self.tournaments_table.all() == []:
             table = self.table()
@@ -56,22 +53,23 @@ class Round:
                         console2 = self.console()
                         console2.print(table2)
                         if search_tournament[0]["description"] != "":
-                            self.viewPlayer.return_menu(comeTournament.menu_tournament, self.create_round)
+                            self.viewPlayer.return_menu(main.comeTournament.menu_tournament, self.create_round)
                         else:
                             self.viewTournament.phrasing_prompt_description()
                             self.tournaments_table.update(
                                 {"description": self.viewTournament.phrasing_prompt_description}, verif.nom ==
                                 search_tournament[0]["nom"])
-                            self.viewPlayer.return_menu(comeTournament.menu_tournament, self.create_round)
+                            self.viewPlayer.return_menu(main.comeTournament.menu_tournament, self.create_round)
                 self.first_round(search_tournament)
                 self.after_first_round(search_tournament)
             else:
                 self.viewTournament.phrasing_tournament(search_tournament)
-                self.viewPlayer.return_menu(comeTournament.menu_tournament, self.create_round)
+                self.viewPlayer.return_menu(main.comeTournament.menu_tournament, self.create_round)
         else:
             self.viewTournament.phrasing_none_tournaments()
-            self.viewPlayer.return_menu(comeTournament.menu_tournament, self.create_round)
+            self.viewPlayer.return_menu(main.comeTournament.menu_tournament, self.create_round)
 
+    # Créer le premier round
     def first_round(self, search_tournament):
         verif = self.query()
         self.viewRound.phrasing_number_round(1)
@@ -83,9 +81,7 @@ class Round:
         inf_moitie = search_tournament[0]["joueurs"][4:]
 
         import main
-        from controllers.player import Player
-        comePlayer = Player(main.Players, main.PromptPlayer, main.TinyDB, main.Query, main.Table, main.Console)
-        comePlayer.display_style_players_database(search_tournament[0]["joueurs"])
+        main.comePlayer.display_style_players_database(search_tournament[0]["joueurs"])
 
         Matchs = self.modelMatch()
 
@@ -129,10 +125,9 @@ class Round:
 
         self.viewRound.phrasing_number_end_round(1)
 
+    # Créer les rounds après le 1er round
     def after_first_round(self, search_tournament):
         import main
-        from controllers.player import Player
-        comePlayer = Player(main.Players, main.PromptPlayer, main.TinyDB, main.Query, main.Table, main.Console)
         verif = self.query()
         round = 1
         while search_tournament[0]["number_round"] > round:
@@ -142,7 +137,7 @@ class Round:
             rounds = self.modelRound(
                 f"ROUND {round}", self.viewRound.prompt_heure_start_round(),
                 self.viewRound.prompt_date_start_round(self.viewRound.prompt_date_start_round))
-            comePlayer.print_players_score_ranking(search_tournament)
+            main.comePlayer.print_players_score_ranking(search_tournament)
             joueur1 = [search_tournament[0]["joueurs"][0]["prenom"]] + [search_tournament[0]["joueurs"][0]["score"]]
             joueur2 = [search_tournament[0]["joueurs"][1]["prenom"]] + [search_tournament[0]["joueurs"][1]["score"]]
             joueur3 = [search_tournament[0]["joueurs"][2]["prenom"]] + [search_tournament[0]["joueurs"][2]["score"]]

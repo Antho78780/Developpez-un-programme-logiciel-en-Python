@@ -22,6 +22,7 @@ class Tournament:
         self.tournaments_table = self.db.table("tournaments")
         self.players_table = self.db.table("players")
 
+    # Créer un tournoi
     def create_tournament(self):
         tournaments = self.modelTournament(
             self.viewTournament.prompt_name_tournament(self.viewTournament.prompt_name_tournament),
@@ -46,16 +47,16 @@ class Tournament:
         self.viewTournament.phrasing_create_tournament()
         self.viewTournament.return_menu(self.menu_tournament, self.create_tournament)
 
+    # Afficher les joueurs qui sonts dans le tournoi
     def get_players_tournament_database(self):
         import main
-        from controllers.player import Player
-        comePlayer = Player(main.Players, main.PromptPlayer, main.TinyDB, main.Query, main.Table, main.Console)
         if not self.players_table.all() == []:
-            comePlayer.display_style_players_database(self.players_table.all())
+            main.comePlayer.display_style_players_database(self.players_table.all())
             self.viewPlayer.phrasing_len_players(self.players_table.all)
         else:
             self.viewPlayer.phrasing_none_players()
 
+    # Afficher les rapports
     def rapports(self):
         self.viewTournament.phrasingRapport(self.tournaments_table)
         try:
@@ -101,6 +102,7 @@ class Tournament:
             self.viewTournament.phrasing_error2()
             self.viewTournament.return_menu(self.menu_tournament, self.rapports)
 
+    # Afficher tous les tournois
     def get_tournaments_database(self):
         if not self.tournaments_table.all() == []:
             for i in self.tournaments_table.all():
@@ -128,16 +130,13 @@ class Tournament:
             self.viewTournament.phrasing_none_tournaments()
             self.viewTournament.return_menu(self.menu_tournament, self.get_tournaments_database)
 
+    # Affichage du menu des tournois
     def menu_tournament(self):
         import main
-        from controllers.round import Round
-        comeRound = Round(main.Rounds, main.Matchs, main.PromptPlayer, main.PromptTournament, main.PromptRound,
-                          main.TinyDB, main.Query, main.Console, main.Table, main.print, main.Prompt)
-        self.viewTournament.menu_tournament(self.create_tournament, comeRound.create_round,
+        self.viewTournament.menu_tournament(self.create_tournament, main.comeRound.create_round,
                                             self.get_tournaments_database, self.menu)
 
+    # Affichage du menu général
     def menu(self):
         import main
-        from controllers.player import Player
-        comePlayer = Player(main.Players, main.PromptPlayer, main.TinyDB, main.Query, main.Table, main.Console)
-        comePlayer.menu()
+        main.comePlayer.menu()

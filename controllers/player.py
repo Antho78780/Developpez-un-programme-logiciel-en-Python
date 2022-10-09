@@ -13,6 +13,7 @@ class Player:
         self.db = self.tinyDB("db.json")
         self.players_table = self.db.table("players")
 
+    # Créer un joueur
     def create_player(self):
         players = self.modelPlayer(
             self.viewPlayer.prompt_userName_player(self.viewPlayer.prompt_userName_player),
@@ -33,6 +34,7 @@ class Player:
         self.viewPlayer.phrasing_create_player()
         self.viewPlayer.return_menu(self.menu_player, self.create_player)
 
+    # Afficher les joueurs
     def get_players_database(self):
         if not self.players_table.all() == []:
             trie_first_name = self.players_table.all()
@@ -45,10 +47,12 @@ class Player:
             self.viewPlayer.phrasing_none_players()
             self.viewPlayer.return_menu(self.menu, self.get_players_database)
 
+    # Modifier le classement d'un joueur
     def editRankPlayer(self):
         self.viewPlayer.promptEditRank(self.query, self.players_table)
         self.viewPlayer.return_menu(self.menu_player, self.editRankPlayer)
 
+    # Afficher avec un meilleur design les joueurs
     def display_style_players_database(self, players):
         table = self.table()
         table.add_column("prenom", justify="center", style="cyan", no_wrap=True)
@@ -64,18 +68,16 @@ class Player:
         console = self.console()
         console.print(table)
 
+    # Afficher le score et le classement des joueurs dans l'ordre
     def print_players_score_ranking(self, search_tournament):
         search_tournament[0]["joueurs"].sort(key=lambda x: (x.get("score"), x.get("classement")))
         self.display_style_players_database(search_tournament[0]["joueurs"])
 
+    # Affichage du menu des joueurs
     def menu_player(self):
         self.viewPlayer.menu_player(self.create_player, self.get_players_database, self.editRankPlayer, self.menu)
 
+    # Affichage du menu général
     def menu(self):
         import main
-        from controllers.tournament import Tournament
-
-        comeTournament = Tournament(main.Tournaments, main.Rounds, main.Matchs, main.PromptTournament,
-                                    main.PromptPlayer, main.PromptRound, main.TinyDB, main.Query, main.Table,
-                                    main.Console, main.Tree, main.print, main.Prompt)
-        self.viewPlayer.menu(self.menu_player, comeTournament.menu_tournament, comeTournament.rapports)
+        self.viewPlayer.menu(self.menu_player, main.comeTournament.menu_tournament, main.comeTournament.rapports)
