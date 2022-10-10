@@ -98,6 +98,7 @@ class Tournament:
                 arbre_tournaments.add(table_players)
                 arbre_tournaments.add(table_rounds)
                 self.print(arbre_tournaments)
+                self.viewTournament.return_menu(self.menu_tournament, self.rapports)
         except IndexError:
             self.viewTournament.phrasing_error2()
             self.viewTournament.return_menu(self.menu_tournament, self.rapports)

@@ -1,6 +1,6 @@
 class Round:
-    def __init__(self, modelRound, modelMatch, viewPlayer, viewTournament,
-                 viewRound, tinyDB, query, console, table, print, prompt):
+    def __init__(self, modelRound, modelMatch, viewPlayer, viewTournament, viewRound, tinyDB, query, console, table,
+                 print, prompt):
         # Models
         self.modelRound = modelRound
         self.modelMatch = modelMatch
@@ -37,7 +37,7 @@ class Round:
                 self.viewTournament.phrasing_tournament(search_tournament)
                 for i in range(len(search_tournament[0]["rounds"])):
                     if search_tournament[0]["rounds"][i] == "ROUND 4":
-                        search_tournament[0]["joueurs"].sort(key=lambda x: (x.get("classement"), x.get("score")))
+                        search_tournament[0]["joueurs"].sort(key=lambda x: (x.get("score"), x.get("classement")))
 
                         self.viewTournament.phrasing_end_ranking()
 
@@ -55,9 +55,8 @@ class Round:
                         if search_tournament[0]["description"] != "":
                             self.viewPlayer.return_menu(main.comeTournament.menu_tournament, self.create_round)
                         else:
-                            self.viewTournament.phrasing_prompt_description()
                             self.tournaments_table.update(
-                                {"description": self.viewTournament.phrasing_prompt_description}, verif.nom ==
+                                {"description": self.viewTournament.phrasing_prompt_description()}, verif.nom ==
                                 search_tournament[0]["nom"])
                             self.viewPlayer.return_menu(main.comeTournament.menu_tournament, self.create_round)
                 self.first_round(search_tournament)
